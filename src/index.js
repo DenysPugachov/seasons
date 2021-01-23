@@ -1,35 +1,39 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import SeasonDisplay from './SeasonDisplay';
+import React from "react";
+import ReactDOM from "react-dom";
+import SeasonDisplay from "./SeasonDisplay";
+import Spinner from "./Spinner";
 
 class App extends React.Component {
   state = {
     lat: null,
     lon: null,
-    errorMessage: '',
+    errorMessage: "",
   };
 
   componentDidMount() {
     window.navigator.geolocation.getCurrentPosition(
-      position => this.setState(() => {
-        return { lat: position.coords.latitude, lon: position.coords.longitude };
-      }),
-      err => this.setState({ errorMessage: err.message })
+      position =>
+        this.setState(() => {
+          return {
+            lat: position.coords.latitude,
+            lon: position.coords.longitude,
+          };
+        }),
+      err => this.setState({ errorMessage: err.message }),
     );
   }
 
-
   render() {
     if (this.state.errorMessage && !this.state.lat) {
-      return <div>Error: { this.state.errorMessage }</div>;
+      return <div>Error: {this.state.errorMessage}</div>;
     }
 
     if (!this.state.errorMessage && this.state.lat) {
-      return <SeasonDisplay lat={ this.state.lat } lon={ this.state.lon } />;
+      return <SeasonDisplay lat={this.state.lat} lon={this.state.lon} />;
     }
 
-    return <div>Loading!</div>;
+    return <Spinner />;
   }
-};
+}
 
-ReactDOM.render(<App />, document.querySelector('#root'));;
+ReactDOM.render(<App />, document.querySelector("#root"));
